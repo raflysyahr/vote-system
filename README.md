@@ -16,6 +16,16 @@ GOOGLE_SECRET=
 
 
 
+### Instalation
+```bash
+pnpm install
+
+```
+
+### Required
+- Google auth
+- Mongodb
+
 First, run the development server:
 
 ```bash
