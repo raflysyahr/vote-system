@@ -1,0 +1,80 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+type Candidate {
+  id    String
+  name  String
+  title String
+  image String
+}
+
+
+
+model votes {
+  id            String      @id @default(auto()) @map("_id") @db.ObjectId
+  title         String
+  startDateTime DateTime    @db.Date
+  endDateTime   DateTime    @db.Date
+  publisher     String
+  code          String      @unique
+  candidates    Candidate[]
+  createdAt     DateTime    @default(now()) @map("createdAt") @db.Date
+  deleteAt      String?
+  scheduled     Boolean
+  userId        String?     @db.ObjectId
+}
+
+model accounts {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId       String   @db.ObjectId
+  providerType String
+  providerAccountId     String
+  providerId   String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model sessions {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  sessionToken String   @unique
+  userId       String   @db.ObjectId
+  expires      DateTime
+  accessToken  String   @unique
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model users {
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  username      String?
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  password      String?
+  image         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model verificationToken {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model participant {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  email       String
+  idcandidate String
+  code        String
+  createdAt   DateTime @default(now()) @map("createdAt") @db.Date
+}
